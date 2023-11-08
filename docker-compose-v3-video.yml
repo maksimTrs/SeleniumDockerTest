@@ -1,7 +1,7 @@
 # To execute this docker-compose yml file use `docker-compose -f docker-compose-v3-video.yml up`
 # Add the `-d` flag at the end for detached execution
 # To stop the execution, hit Ctrl+C, and then `docker-compose -f docker-compose-v3-video.yml down`
-# docker-compose up -f docker-compose-v3-video.yml --scale chrome=2 --scale firefox=2
+# docker compose  -f docker-compose-v3-video.yml up --scale chrome=2 --scale firefox=2
 version: "3"
 services:
   chrome:
@@ -13,9 +13,9 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_VNC_NO_PASSWORD=1
-    ports:
-      - "7900:7900"
+      #- SE_VNC_NO_PASSWORD=1
+#    ports:
+#      - "7900:7900"
 
   firefox:
     image: selenium/node-firefox:4.15.0-20231102
@@ -26,9 +26,9 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_VNC_NO_PASSWORD=1
-    ports:
-      - "7902:7900"
+      #- SE_VNC_NO_PASSWORD=1
+#    ports:
+#      - "7902:7900"
   chrome_video:
     image: selenium/video:ffmpeg-6.0-20231102
     volumes:
