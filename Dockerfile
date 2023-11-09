@@ -15,4 +15,4 @@ WORKDIR /app/postman
 COPY src/test/java/com/docker/learn/SOAP_testing_yandex_speller.postman_collection.json /app/postman/
 
 # CMD to execute Newman and run the Postman collection
-CMD ["newman", "run", "SOAP_testing_yandex_speller.postman_collection.json", "-r", "htmlextra"]
+CMD ["newman", "run", "SOAP_testing_yandex_speller.postman_collection.json", "-r", "htmlextra,cli"]
