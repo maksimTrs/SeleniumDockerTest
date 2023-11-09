@@ -1,0 +1,421 @@
+{
+	"info": {
+		"_postman_id": "ae1f5b7b-f21b-4456-b99e-de5e30af390c",
+		"name": "SOAP testing (yandex speller)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2455465",
+		"_collection_link": "https://interstellar-astronaut-350105.postman.co/workspace/My-WorkspaceMain~3a139893-d49b-4aa0-8c4d-f78af1d74b59/collection/9584183-ae1f5b7b-f21b-4456-b99e-de5e30af390c?action=share&source=collection_link&creator=2455465"
+	},
+	"item": [
+		{
+			"name": "Get SOAP request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"pm.test(\"Status code name has string\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Soap",
+						"value": "https://speller.yandex.net/services/spellservice?WSDL",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://speller.yandex.net/services/spellservice/checkText?text=стулл&lang=ru",
+					"protocol": "https",
+					"host": [
+						"speller",
+						"yandex",
+						"net"
+					],
+					"path": [
+						"services",
+						"spellservice",
+						"checkText"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "стулл"
+						},
+						{
+							"key": "lang",
+							"value": "ru"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post SOAP request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"стулл\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "Soap",
+						"value": "https://speller.yandex.net/services/spellservice?WSDL",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "text",
+							"value": "стулл",
+							"type": "text"
+						},
+						{
+							"key": "lang",
+							"value": "ru",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://speller.yandex.net/services/spellservice/checkText",
+					"protocol": "https",
+					"host": [
+						"speller",
+						"yandex",
+						"net"
+					],
+					"path": [
+						"services",
+						"spellservice",
+						"checkText"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "стулл",
+							"disabled": true
+						},
+						{
+							"key": "lang",
+							"value": "ru",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post WSDL method request  with parse response testing",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonBody =  xml2Json(responseBody);\r",
+							"var code = jsonBody[\"soap:Envelope\"][\"soap:Body\"][\"CheckTextResponse\"][\"SpellResult\"][\"error\"][\"$\"][\"code\"];\r",
+							"var valueS = jsonBody[\"soap:Envelope\"][\"soap:Body\"][\"CheckTextResponse\"][\"SpellResult\"][\"error\"][\"s\"];\r",
+							"\r",
+							"pm.test(\"Xml test data = code\", function () {\r",
+							"       console.log(code);\r",
+							"       pm.expect(code).to.eql(\"1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Xml test data = s\", function () {\r",
+							"       console.log(valueS);\r",
+							"       pm.expect(valueS).to.eql(\"стул\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/soap+xml",
+						"type": "text"
+					},
+					{
+						"key": "Soap",
+						"value": "https://speller.yandex.net/services/spellservice?WSDL",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:spel=\"http://speller.yandex.net/services/spellservice\">\r\n   <soapenv:Header/>\r\n   <soapenv:Body>\r\n      <spel:CheckTextRequest lang=\"ru\" options=\"0\" format=\"\">\r\n         <spel:text>стулл</spel:text>\r\n      </spel:CheckTextRequest>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://speller.yandex.net/services/spellservice/checkText",
+					"protocol": "http",
+					"host": [
+						"speller",
+						"yandex",
+						"net"
+					],
+					"path": [
+						"services",
+						"spellservice",
+						"checkText"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "стулл",
+							"disabled": true
+						},
+						{
+							"key": "lang",
+							"value": "ru",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get SOAP from SoapAction",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonBody =  xml2Json(responseBody);\r",
+							"var code = jsonBody[\"soap:Envelope\"][\"soap:Body\"][\"CheckTextResponse\"][\"SpellResult\"][\"error\"][\"$\"][\"code\"];\r",
+							"var valueS = jsonBody[\"soap:Envelope\"][\"soap:Body\"][\"CheckTextResponse\"][\"SpellResult\"][\"error\"][\"s\"];\r",
+							"\r",
+							"pm.test(\"Xml test data = code\", function () {\r",
+							"       console.log(code);\r",
+							"       pm.expect(code).to.eql(\"1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Xml test data = s\", function () {\r",
+							"       console.log(valueS);\r",
+							"       pm.expect(valueS[0]).to.eql(\"стул\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "SOAPAction",
+						"value": "http://speller.yandex.net/services/spellservice/checkText",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<Envelope xmlns=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n    <Body>\r\n        <CheckTextRequest xmlns=\"http://speller.yandex.net/services/spellservice\">\r\n            <text>стулл</text>\r\n        </CheckTextRequest>\r\n    </Body>\r\n</Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://speller.yandex.net/services/spellservice?WSDL",
+					"protocol": "https",
+					"host": [
+						"speller",
+						"yandex",
+						"net"
+					],
+					"path": [
+						"services",
+						"spellservice"
+					],
+					"query": [
+						{
+							"key": "WSDL",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Json Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://speller.yandex.net/services/spellservice.json/checkText?text=ыгла&lang=ru",
+					"protocol": "https",
+					"host": [
+						"speller",
+						"yandex",
+						"net"
+					],
+					"path": [
+						"services",
+						"spellservice.json",
+						"checkText"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "ыгла"
+						},
+						{
+							"key": "lang",
+							"value": "ru"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Json Request Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "text",
+							"value": "хлеб",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "lang",
+							"value": "ru",
+							"type": "text"
+						},
+						{
+							"key": "text",
+							"value": "хлеп",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://speller.yandex.net/services/spellservice.json/checkText",
+					"protocol": "https",
+					"host": [
+						"speller",
+						"yandex",
+						"net"
+					],
+					"path": [
+						"services",
+						"spellservice.json",
+						"checkText"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
