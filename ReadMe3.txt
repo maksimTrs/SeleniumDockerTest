@@ -2,8 +2,16 @@
 
 docker build -t your_image_name .
 
+
 2) And then run the container:
 
 docker run -v <LOCAL_PATH>:<CONTAINER_PATH> your_image_name
 
-(to retrieve the postman html report -> CONTAINER_PATH = /app/postman/newman)
+
+docker run -v "E:\MAX\IT\UDEMY\Docker_Test_Automation_MasterClass\SeleniumDockerTest":/app/postman/newman
+--name postman-newman roronoazorroippo/postman-newman
+
+
+3) Restart container:
+
+docker start  postman-newman
