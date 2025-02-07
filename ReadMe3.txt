@@ -7,11 +7,6 @@ docker build -t your_image_name .
 
 docker run -v <LOCAL_PATH>:<CONTAINER_PATH> your_image_name
 
-
+E.g.:
 docker run -v "SeleniumDockerTest":/app/postman/newman
---name postman-newman roronoazorroippo/postman-newman
-
-
-3) Restart container:
-
-docker start  postman-newman
+--name postman-newman dockerhubAcc/postman-newman
