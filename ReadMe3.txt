@@ -8,7 +8,7 @@ docker build -t your_image_name .
 docker run -v <LOCAL_PATH>:<CONTAINER_PATH> your_image_name
 
 
-docker run -v "E:\MAX\IT\UDEMY\Docker_Test_Automation_MasterClass\SeleniumDockerTest":/app/postman/newman
+docker run -v "SeleniumDockerTest":/app/postman/newman
 --name postman-newman roronoazorroippo/postman-newman
 
 
